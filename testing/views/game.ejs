@@ -8,7 +8,137 @@
 </head>
 
 <body>
-    <canvas width="400px" , height="400px"></canvas>
+    <!-- Sets the movement area for the player -->
+    <canvas width="800px" height="800px" id="canvas" style="border: 4px solid black;"></canvas>
 </body>
+
+<script>
+
+
+    const canvas = document.getElementById("canvas")
+    var c = canvas.getContext('2d');
+
+    // Define the player as a box
+    var playerImg = {
+        draw: function () {
+            c.fillStyle = "blue";
+            c.fillRect(player.x, player.y, player.w, player.h);
+        }
+    };
+
+    //player data
+    const player = {
+        x: 0,
+        y: 0,
+        h: 40,
+        w: 40,
+        img: playerImg,
+    }
+
+    let right;
+    let left;
+    let up;
+    let down;
+
+    right = true
+
+
+    //checks if user started holding key
+    window.addEventListener("keydown", function (event) {
+        if (event.defaultPrevented) {
+            return; // Do nothing if the event was already processed
+        }
+
+        //reading the input and moving the player is too slow and clunky
+        //this makes the player movement smooth
+        if (event.key == "ArrowDown") {
+            down = true
+            up = false
+            right = false
+            left = false
+        }
+        if (event.key == "ArrowUp") {
+            up = true
+            down = false
+            right = false
+            left = false
+        }
+        if (event.key == "ArrowRight") {
+            right = true
+            down = false
+            up = false
+            left = false
+        }
+        if (event.key == "ArrowLeft") {
+            left = true
+            down = false
+            right = false
+            up = false
+        }
+    });
+
+    // //Check if user stopped holding key
+    // window.addEventListener("keyup", function (event) {
+    //     if (event.defaultPrevented) {
+    //         return; // Do nothing if the event was already processed
+    //     }
+
+    //     if (event.key == "ArrowDown") {
+    //         down = false
+    //     }
+    //     if (event.key == "ArrowUp") {
+    //         up = false
+    //     }
+    //     if (event.key == "ArrowRight") {
+    //         right = false
+    //     }
+    //     if (event.key == "ArrowLeft") {
+    //         left = false
+    //     }
+
+    // });
+    //moves the displayed player location
+    player.img.draw();
+    function refresh() {
+
+        c.clearRect(0, 0, canvas.width, canvas.height)
+        player.img.draw();
+        c.font = "80px Arial";
+    }
+
+    //moves the player
+    setInterval(function () {
+        playerSpeed = 40
+        if (down == true) {
+            player.y += playerSpeed
+        }
+        if (up == true) {
+            player.y -= playerSpeed
+        }
+        if (right == true) {
+            player.x += playerSpeed
+        }
+        if (left == true) {
+            player.x -= playerSpeed
+        }
+        playerSpeed = 0
+        requestAnimationFrame(refresh)
+        refresh()
+
+    }, 1000);
+
+    //stop player from going off-screen
+    if (player.x < 0 || player.x > canvas.width - player.w) {
+        //Make player lose
+    }
+    if (player.y < 0 || player.y > canvas.height - player.h) {
+        //Make player lose
+    }
+
+    requestAnimationFrame(refresh)
+
+    refresh()
+
+</script>
 
 </html>
