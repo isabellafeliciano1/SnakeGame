@@ -23,6 +23,7 @@ app.get('/chat', routes.chat);
 app.get('/login', routes.login);
 app.post('/login', routes.postLogin);
 app.get('/home', routes.home)
+app.get('/game', routes.game)
 
 
 app.listen(PORT, () => {});

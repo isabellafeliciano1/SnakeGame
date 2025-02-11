@@ -22,6 +22,10 @@ function home(req, res) {
   res.render('home', { user: req.session.user });
 }
 
+function game(req,res) {
+  res.render('game')
+}
+
 function login(req, res) {
   res.render('login');
 }
@@ -91,6 +95,7 @@ module.exports = {
   login,
   postLogin,
   isAuthenticated,
-  home
+  home,
+  game
 }
 
