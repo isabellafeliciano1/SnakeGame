@@ -7,12 +7,13 @@
     <title>Snake</title>
     <style>
         body {
-            display: flex;
+            /* display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; */
+            text-align: center;
         }
 
         canvas {
@@ -23,136 +24,117 @@
 
 <body>
     <!-- Sets the movement area for the player -->
-    <canvas width="800px" height="800px" id="canvas" style="border: 4px solid black;"></canvas>
+    <canvas id="canvas" style="border: 4px solid black;"></canvas>
 </body>
 
 <script>
+    let spaceSize = 32
+    let rows = 20
+    let columns = 20
+    let canvas
+    let context
 
+    let playerX = spaceSize * 5
+    let playerY = spaceSize * 5
 
-    const canvas = document.getElementById("canvas")
-    var c = canvas.getContext('2d');
+    let speedX = 0;  //speed of snake in x coordinate.
+    let speedY = 0;  //speed of snake in Y coordinate.
 
-    // Define the player as a box
-    var playerImg = {
-        draw: function () {
-            c.fillStyle = "blue";
-            c.fillRect(player.x, player.y, player.w, player.h);
-        }
-    };
+    let playerBody = []
 
-    //player data
-    const player = {
-        x: 0,
-        y: 0,
-        h: 40,
-        w: 40,
-        img: playerImg,
+    let foodX
+    let foodY
+
+    let gameOver = false
+
+    window.onload = function () {
+        canvas = document.getElementById("canvas")
+        canvas.height = rows * spaceSize
+        canvas.width = columns * spaceSize
+        context = canvas.getContext("2d")
+
+        foodSpawn()
+        document.addEventListener("keydown", changeDir)
+
+        setInterval(gameUpdate, 1000 / 15)
     }
 
-    let right;
-    let left;
-    let up;
-    let down;
-
-    right = true
-
-
-    //checks if user started holding key
-    window.addEventListener("keydown", function (event) {
-        if (event.defaultPrevented) {
-            return; // Do nothing if the event was already processed
+    function gameUpdate() {
+        if (gameOver) {
+            return
         }
 
-        //reading the input and moving the player is too slow and clunky
-        //this makes the player movement smooth
-        if (event.key == "ArrowDown") {
-            down = true
-            up = false
-            right = false
-            left = false
-        }
-        if (event.key == "ArrowUp") {
-            up = true
-            down = false
-            right = false
-            left = false
-        }
-        if (event.key == "ArrowRight") {
-            right = true
-            down = false
-            up = false
-            left = false
-        }
-        if (event.key == "ArrowLeft") {
-            left = true
-            down = false
-            right = false
-            up = false
-        }
-    });
+        // Background color
+        context.fillStyle = "grey";
+        context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // //Check if user stopped holding key
-    // window.addEventListener("keyup", function (event) {
-    //     if (event.defaultPrevented) {
-    //         return; // Do nothing if the event was already processed
-    //     }
+        // food color and location
+        context.fillStyle = "red";
+        context.fillRect(foodX, foodY, spaceSize, spaceSize);
 
-    //     if (event.key == "ArrowDown") {
-    //         down = false
-    //     }
-    //     if (event.key == "ArrowUp") {
-    //         up = false
-    //     }
-    //     if (event.key == "ArrowRight") {
-    //         right = false
-    //     }
-    //     if (event.key == "ArrowLeft") {
-    //         left = false
-    //     }
+        if (playerX == foodX && playerY == foodY) {
+            playerBody.push([foodX, foodY])
+            foodSpawn()
+        }
 
-    // });
-    //moves the displayed player location
-    player.img.draw();
-    function refresh() {
+        // increase snake size
+        for (let i = playerBody.length - 1; i >= 0; i--) {
+            playerBody[i] = playerBody[i - 1]
+        }
 
-        c.clearRect(0, 0, canvas.width, canvas.height)
-        player.img.draw();
-        c.font = "80px Arial";
+        if (playerBody.length) {
+            playerBody[0] = [playerX, playerY]
+        }
+
+        // update snake x & y
+        context.fillStyle = "blue";
+        playerX += speedX * spaceSize
+        playerY += speedY * spaceSize
+        // draw snake
+        context.fillRect(playerX, playerY, spaceSize, spaceSize)
+        for (let i = 0; i < playerBody.length; i++) {
+            context.fillRect(playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+        }
+
+        // check if snake is out of bounds
+        if (playerX < 0 || playerX >= rows * spaceSize || playerY < 0 || playerY >= columns * spaceSize) {
+            gameOver = true
+            alert("Game Over")
+        }
+
+        // check if snake hits itself
+        for (let i = 0; i < playerBody.length; i++) {
+            if (playerX == playerBody[i][0] && playerY == playerBody[i][1]) {
+                gameOver = true
+                alert("Game Over")
+            }
+        }
     }
 
-    //moves the player
-    setInterval(function () {
-        playerSpeed = 40
-        if (down == true) {
-            player.y += playerSpeed
+    //snake movement
+    function changeDir(e) {
+        if ((e.code == 'ArrowUp' || e.code == 'KeyW') && speedY != 1) {
+            speedX = 0
+            speedY = -1
         }
-        if (up == true) {
-            player.y -= playerSpeed
+        if ((e.code == 'ArrowDown' || e.code == 'KeyS') && speedY != -1) {
+            speedX = 0
+            speedY = 1
         }
-        if (right == true) {
-            player.x += playerSpeed
+        if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && speedX != 1) {
+            speedX = -1
+            speedY = 0
         }
-        if (left == true) {
-            player.x -= playerSpeed
+        if ((e.code == 'ArrowRight' || e.code == 'KeyD') && speedX != -1) {
+            speedX = 1
+            speedY = 0
         }
-        playerSpeed = 0
-        requestAnimationFrame(refresh)
-        refresh()
-
-    }, 1000);
-
-    //stop player from going off-screen
-    if (player.x < 0 || player.x > canvas.width - player.w) {
-        //Make player lose
-    }
-    if (player.y < 0 || player.y > canvas.height - player.h) {
-        //Make player lose
     }
 
-    requestAnimationFrame(refresh)
-
-    refresh()
-
+    function foodSpawn() {
+        foodX = Math.floor(Math.random() * rows) * spaceSize
+        foodY = Math.floor(Math.random() * columns) * spaceSize
+    }
 </script>
 
 </html>
