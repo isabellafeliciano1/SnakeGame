@@ -30,6 +30,12 @@ function login(req, res) {
   res.render('login');
 }
 
+function logout(req,res) {
+  req.session.destroy();
+  res.redirect('/')
+
+}
+
 
 function postLogin(req, res) {
   const crypto = require('crypto');
@@ -96,6 +102,7 @@ module.exports = {
   postLogin,
   isAuthenticated,
   home,
-  game
+  game,
+  logout
 }
 

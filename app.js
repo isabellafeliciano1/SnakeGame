@@ -24,7 +24,7 @@ app.get('/login', routes.login);
 app.post('/login', routes.postLogin);
 app.get('/home', routes.home)
 app.get('/game', routes.game)
-
+app.get('/logout', routes.logout)
 
 app.listen(PORT, () => {});
 
