@@ -1,3 +1,4 @@
+// Install the required packages using npm:
 const express = require('express');
 const app = express(); app.set('view engine', 'ejs');
 const session = require('express-session');
@@ -11,7 +12,7 @@ const sessionMiddleware = session({
     secret: 'your secret key',
     resave: false,
     saveUninitialized: true,
-    cookie: {secure:false} 
+    cookie: { secure: false }
 });
 
 app.use(sessionMiddleware);
@@ -26,6 +27,4 @@ app.get('/home', routes.home)
 app.get('/game', routes.game)
 app.get('/logout', routes.logout)
 
-app.listen(PORT, () => {});
-
-
+app.listen(PORT, () => { });

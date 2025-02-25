@@ -1,6 +1,8 @@
+// Import the required modules
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
 
+// Create a new SQLite database connection
 const db = new sqlite3.Database('./data/database.db', (err) => {
   if (err) {
     return console.error(err.message);
@@ -8,6 +10,7 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
   console.log('Connected to the database.');
 });
 
+// Define the route handlers
 function index(req, res) {
   res.render('index', { user: req.session.user });
 }
@@ -22,7 +25,7 @@ function home(req, res) {
   res.render('home', { user: req.session.user });
 }
 
-function game(req,res) {
+function game(req, res) {
   res.render('game')
 }
 
@@ -30,22 +33,23 @@ function login(req, res) {
   res.render('login');
 }
 
-function logout(req,res) {
+function logout(req, res) {
   req.session.destroy();
   res.redirect('/')
 
 }
 
-
+// Function to handle login and registration
 function postLogin(req, res) {
-  const crypto = require('crypto');
   if (req.body.user && req.body.pass) { //If there's a username and password
+    const crypto = require('crypto');
     const { username } = req.body.user
     db.get('SELECT * FROM users WHERE username=?;', req.body.user, (err, row) => {
       if (err) {
         console.error(err);
         res.send("There wan an error:\n" + err)
       } else if (!row) {
+
         //create new salt for this user
         const salt = crypto.randomBytes(16).toString('hex')
 
@@ -83,18 +87,19 @@ function postLogin(req, res) {
           }
         })
       }
-
     })
+
   } else {
     res.send("You need a username and password");
   }
 }
 
 function isAuthenticated(req, res, next) {
-  if (req.session.user) next() 
-  else res.redirect('/login')   
+  if (req.session.user) next()
+  else res.redirect('/login')
 }
 
+// Export the route handlers
 module.exports = {
   index,
   chat,
@@ -105,4 +110,3 @@ module.exports = {
   game,
   logout
 }
-
