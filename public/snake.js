@@ -29,6 +29,18 @@ const snakeTails = {
     "right": "img/RightSnakeTail.png"
 }
 
+const fruit = new Image()
+const fruits = {
+    "Banana":"img/fruits/bana.png",
+    "Cherry":"img/fruits/chry.png",
+    "Grape":"img/fruits/grp.png",
+    "Lemon":"img/fruits/lmn.png",
+    "Orange":"img/fruits/orng.png",
+    "Peach":"img/fruits/pch.png",
+    "Apple":"img/fruits/ppl.png",
+    "Watermelon":"img/fruits/wmelon.png",
+}
+
 // Initially loads the canvas
 window.onload = function () {
     canvas = document.getElementById("canvas")
@@ -51,8 +63,7 @@ function gameUpdate() {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // Spawns the apple
-    context.fillStyle = "red";
-    context.fillRect(foodX, foodY, spaceSize, spaceSize);
+    context.drawImage(fruit,foodX, foodY, spaceSize, spaceSize );
 
     // Check if the snake eats the apple
     if (playerX == foodX && playerY == foodY) {
@@ -144,4 +155,6 @@ function changeDir(e) {
 function foodSpawn() {
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
+    rand = Math.floor(Math.random() * 8);
+    fruit.src = "img/fruits/bana.png"
 }
