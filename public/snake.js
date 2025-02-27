@@ -1,3 +1,4 @@
+// All the variables needed for the game
 let spaceSize = 32
 let rows = 20
 let columns = 20
@@ -18,8 +19,15 @@ const snakeHead = new Image();
 // Load the snake body
 const snakeBody = new Image();
 snakeBody.src = "img/BodySnake.png";
+
 // Load the snake tail 
 const snakeTail = new Image();
+const snakeTails = {
+    "up": "img/ForwardSnakeTail.png",
+    "down": "img/BackSnakeTail.png",
+    "left": "img/LeftSnakeTail.png",
+    "right": "img/RightSnakeTail.png"
+}
 
 // Initially loads the canvas
 window.onload = function () {
@@ -69,14 +77,18 @@ function gameUpdate() {
     // Lets the snake appear on the canvas
     context.drawImage(snakeHead, playerX, playerY, spaceSize, spaceSize)
 
-    //loop through the list of body parts and draw each one
+    // Loop through the list of body parts and draw each one
     for (let i = 0; i < playerBody.length; i++) {
         //if this is the last body part, draw the tail
         if (i == playerBody.length - 1) {
+            //if the previous body part is above this one, draw the downward tail image
             context.drawImage(snakeTail, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+            //else if the previous part is to the right... etc.. etc...
+        } else {
+            //else draw a body part
+            context.drawImage(snakeBody, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+
         }
-        //else draw a body part
-        context.drawImage(snakeBody, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
     }
 
     // Makes sure the canvas loads properly with all the properties -->
@@ -103,14 +115,14 @@ function changeDir(e) {
         speedY = -1
         check1 = 0
         snakeHead.src = "img/BackSnakeHead.png";
-        snakeTail.src = "img/ForwardSnakeTail.png";
+        snakeTail.src = "img/BackSnakeTail.png";
     }
     if ((e.code == 'ArrowDown' || e.code == 'KeyS') && speedY != -1 && check1 == 1) {
         speedX = 0
         speedY = 1
         check1 = 0
         snakeHead.src = "img/ForwardSnakeHead.png";
-        snakeTail.src = "img/BackSnakeTail.png";
+        snakeTail.src = "img/ForwardSnakeTail.png";
     }
     if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && speedX != 1 && check1 == 1) {
         speedX = -1

@@ -7,6 +7,7 @@ const path = require('path');
 const routes = require('./modules/routes');
 const PORT = 3000;
 
+// Create a session middleware with the SQLiteStore
 const sessionMiddleware = session({
     store: new SQLiteStore(),
     secret: 'your secret key',
@@ -15,10 +16,12 @@ const sessionMiddleware = session({
     cookie: { secure: false }
 });
 
+// Set the view engine to EJS
 app.use(sessionMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
+// Define routes
 app.get('/', routes.index);
 app.get('/chat', routes.chat);
 app.get('/login', routes.login);
@@ -27,4 +30,5 @@ app.get('/home', routes.home)
 app.get('/game', routes.game)
 app.get('/logout', routes.logout)
 
+// Start the server
 app.listen(PORT, () => { });
