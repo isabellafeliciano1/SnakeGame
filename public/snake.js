@@ -1,3 +1,4 @@
+// All the variables needed for the game
 let spaceSize = 32
 let rows = 20
 let columns = 20
@@ -18,8 +19,27 @@ const snakeHead = new Image();
 // Load the snake body
 const snakeBody = new Image();
 snakeBody.src = "img/BodySnake.png";
+
 // Load the snake tail 
 const snakeTail = new Image();
+const snakeTails = {
+    "up": "img/ForwardSnakeTail.png",
+    "down": "img/BackSnakeTail.png",
+    "left": "img/LeftSnakeTail.png",
+    "right": "img/RightSnakeTail.png"
+}
+
+const fruit = new Image()
+const fruits = {
+    "Banana":"img/fruits/bana.png",
+    "Cherry":"img/fruits/chry.png",
+    "Grape":"img/fruits/grp.png",
+    "Lemon":"img/fruits/lmn.png",
+    "Orange":"img/fruits/orng.png",
+    "Peach":"img/fruits/pch.png",
+    "Apple":"img/fruits/ppl.png",
+    "Watermelon":"img/fruits/wmelon.png",
+}
 
 // Initially loads the canvas
 window.onload = function () {
@@ -43,8 +63,7 @@ function gameUpdate() {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // Spawns the apple
-    context.fillStyle = "red";
-    context.fillRect(foodX, foodY, spaceSize, spaceSize);
+    context.drawImage(fruit,foodX, foodY, spaceSize, spaceSize );
 
     // Check if the snake eats the apple
     if (playerX == foodX && playerY == foodY) {
@@ -69,14 +88,18 @@ function gameUpdate() {
     // Lets the snake appear on the canvas
     context.drawImage(snakeHead, playerX, playerY, spaceSize, spaceSize)
 
-    //loop through the list of body parts and draw each one
+    // Loop through the list of body parts and draw each one
     for (let i = 0; i < playerBody.length; i++) {
         //if this is the last body part, draw the tail
         if (i == playerBody.length - 1) {
+            //if the previous body part is above this one, draw the downward tail image
             context.drawImage(snakeTail, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+            //else if the previous part is to the right... etc.. etc...
+        } else {
+            //else draw a body part
+            context.drawImage(snakeBody, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+
         }
-        //else draw a body part
-        context.drawImage(snakeBody, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
     }
 
     // Makes sure the canvas loads properly with all the properties -->
@@ -103,14 +126,14 @@ function changeDir(e) {
         speedY = -1
         check1 = 0
         snakeHead.src = "img/BackSnakeHead.png";
-        snakeTail.src = "img/ForwardSnakeTail.png";
+        snakeTail.src = "img/BackSnakeTail.png";
     }
     if ((e.code == 'ArrowDown' || e.code == 'KeyS') && speedY != -1 && check1 == 1) {
         speedX = 0
         speedY = 1
         check1 = 0
         snakeHead.src = "img/ForwardSnakeHead.png";
-        snakeTail.src = "img/BackSnakeTail.png";
+        snakeTail.src = "img/ForwardSnakeTail.png";
     }
     if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && speedX != 1 && check1 == 1) {
         speedX = -1
@@ -132,4 +155,6 @@ function changeDir(e) {
 function foodSpawn() {
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
+    rand = Math.floor(Math.random() * 8);
+    fruit.src = "img/fruits/bana.png"
 }
