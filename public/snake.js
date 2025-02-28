@@ -30,16 +30,17 @@ const snakeTails = {
 }
 
 const fruit = new Image()
-const fruits = {
-    "Banana":"img/fruits/bana.png",
-    "Cherry":"img/fruits/chry.png",
-    "Grape":"img/fruits/grp.png",
-    "Lemon":"img/fruits/lmn.png",
-    "Orange":"img/fruits/orng.png",
-    "Peach":"img/fruits/pch.png",
-    "Apple":"img/fruits/ppl.png",
-    "Watermelon":"img/fruits/wmelon.png",
-}
+const fruits = [
+    "img/fruits/bana.png",
+    "img/fruits/chry.png",
+    "img/fruits/grp.png",
+    "img/fruits/lmn.png",
+    "img/fruits/orng.png",
+    "img/fruits/pch.png",
+    "img/fruits/ppl.png",
+    "img/fruits/wmelon.png",
+]
+
 
 // Initially loads the canvas
 window.onload = function () {
@@ -155,6 +156,8 @@ function changeDir(e) {
 function foodSpawn() {
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
+    //Spawns Fruit randomly || Incomplete
     rand = Math.floor(Math.random() * 8);
-    fruit.src = "img/fruits/bana.png"
+    var fruity = fruits[rand]
+    fruit.src = fruity
 }
