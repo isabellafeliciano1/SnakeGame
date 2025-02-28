@@ -18,29 +18,28 @@ const snakeHead = new Image();
 
 // Load the snake body
 const snakeBody = new Image();
-snakeBody.src = "img/BodySnake.png";
+snakeBody.src = "img/originalsnake/BodySnake.png";
 
 // Load the snake tail 
 const snakeTail = new Image();
 const snakeTails = {
-    "up": "img/ForwardSnakeTail.png",
-    "down": "img/BackSnakeTail.png",
-    "left": "img/LeftSnakeTail.png",
-    "right": "img/RightSnakeTail.png"
+    "up": "img/originalsnake/ForwardSnakeTail.png",
+    "down": "img/originalsnake/BackSnakeTail.png",
+    "left": "img/originalsnake/LeftSnakeTail.png",
+    "right": "img/originalsnake/RightSnakeTail.png"
 }
 
 const fruit = new Image()
 const fruits = [
-    "img/fruits/bana.png",
-    "img/fruits/chry.png",
-    "img/fruits/grp.png",
-    "img/fruits/lmn.png",
-    "img/fruits/orng.png",
-    "img/fruits/pch.png",
-    "img/fruits/ppl.png",
-    "img/fruits/wmelon.png",
+    "img/fruits/banana.png",
+    "img/fruits/cherry.png",
+    "img/fruits/grape.png",
+    "img/fruits/lemon.png",
+    "img/fruits/orange.png",
+    "img/fruits/peach.png",
+    "img/fruits/apple.png",
+    "img/fruits/watermelon.png",
 ]
-
 
 // Initially loads the canvas
 window.onload = function () {
@@ -63,21 +62,21 @@ function gameUpdate() {
     context.fillStyle = "grey";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Spawns the apple
-    context.drawImage(fruit,foodX, foodY, spaceSize, spaceSize );
+    // Spawns the fruit
+    context.drawImage(fruit, foodX, foodY, spaceSize, spaceSize);
 
-    // Check if the snake eats the apple
+    // Check if the snake eats the fruit
     if (playerX == foodX && playerY == foodY) {
         playerBody.push([foodX, foodY])
         foodSpawn()
     }
 
-    // When the snake eats the apple, it adds a new segment to the snake
+    // When the snake eats the fruit, it adds a new segment to the snake
     for (let i = playerBody.length - 1; i >= 0; i--) {
         playerBody[i] = playerBody[i - 1];
     }
 
-    // Allows the snake to grow when it eats the apple
+    // Allows the snake to grow when it eats the fruit
     if (playerBody.length) {
         playerBody[0] = [playerX, playerY];
     }
@@ -126,37 +125,37 @@ function changeDir(e) {
         speedX = 0
         speedY = -1
         check1 = 0
-        snakeHead.src = "img/BackSnakeHead.png";
-        snakeTail.src = "img/BackSnakeTail.png";
+        snakeHead.src = "img/originalsnake/BackSnakeHead.png";
+        snakeTail.src = "img/originalsnake/BackSnakeTail.png";
     }
     if ((e.code == 'ArrowDown' || e.code == 'KeyS') && speedY != -1 && check1 == 1) {
         speedX = 0
         speedY = 1
         check1 = 0
-        snakeHead.src = "img/ForwardSnakeHead.png";
-        snakeTail.src = "img/ForwardSnakeTail.png";
+        snakeHead.src = "img/originalsnake/ForwardSnakeHead.png";
+        snakeTail.src = "img/originalsnake/ForwardSnakeTail.png";
     }
     if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && speedX != 1 && check1 == 1) {
         speedX = -1
         speedY = 0
         check1 = 0
-        snakeHead.src = "img/LeftSnakeHead.png";
-        snakeTail.src = "img/LeftSnakeTail.png";
+        snakeHead.src = "img/originalsnake/LeftSnakeHead.png";
+        snakeTail.src = "img/originalsnake/LeftSnakeTail.png";
     }
     if ((e.code == 'ArrowRight' || e.code == 'KeyD') && speedX != -1 && check1 == 1) {
         speedX = 1
         speedY = 0
         check1 = 0
-        snakeHead.src = "img/RightSnakeHead.png";
-        snakeTail.src = "img/RightSnakeTail.png";
+        snakeHead.src = "img/originalsnake/RightSnakeHead.png";
+        snakeTail.src = "img/originalsnake/RightSnakeTail.png";
     }
 }
 
-// Lets the apple spawn randomly AND loads the canvas
+// Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
-    //Spawns Fruit randomly || Incomplete
+    //Spawns fruit randomly || Incomplete
     rand = Math.floor(Math.random() * 8);
     var fruity = fruits[rand]
     fruit.src = fruity
