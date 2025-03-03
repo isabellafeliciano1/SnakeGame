@@ -15,6 +15,7 @@ let gameOver = false
 
 // Load the snake head
 const snakeHead = new Image();
+snakeHead.src = "img/originalsnake/ForwardSnakeHead.png"
 
 // Load the snake body
 const snakeBody = new Image();
