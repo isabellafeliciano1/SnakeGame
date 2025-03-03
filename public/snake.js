@@ -42,6 +42,10 @@ const fruits = [
     "img/fruits/watermelon.png",
 ]
 
+// Load the background
+const map = new Image()
+map.src = "img/GameMap.png"
+
 // Initially loads the canvas
 window.onload = function () {
     canvas = document.getElementById("canvas")
@@ -60,8 +64,7 @@ function gameUpdate() {
     }
 
     // Changes the background color AND lets the snake move freely
-    context.fillStyle = "grey";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(map, 0, 0, canvas.width, canvas.height)
 
     // Spawns the fruit
     context.drawImage(fruit, foodX, foodY, spaceSize, spaceSize);
