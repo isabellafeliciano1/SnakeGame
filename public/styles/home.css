@@ -1,0 +1,42 @@
+body {
+    background-color: #00530e;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: center;
+    color: #ffffff;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cute-button {
+    background-color: #10a30b;
+    border: 2px solid #26a300;
+    border-radius: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.cute-button:hover {
+    background-color: #10a30b;
+    transform: scale(1.1);
+}
