@@ -53,7 +53,7 @@ window.onload = function () {
     canvas.width = columns * spaceSize
     context = canvas.getContext("2d")
     foodSpawn()
-    document.addEventListener("keydown", changeDir)
+    document.addEventListener("keydown", keyboardInput)
     setInterval(gameUpdate, 1000 / 15)
 }
 
@@ -110,50 +110,84 @@ function gameUpdate() {
     // Makes sure the snake doesn't run into the walls        
     if (playerX < 0 || playerX >= rows * spaceSize || playerY < 0 || playerY >= columns * spaceSize) {
         gameOver = true
-        alert("Game Over")
+        // alert("Game Over")
     }
 
     // Makes sure the snake doesn't run into itself -->
     for (let i = 0; i < playerBody.length; i++) {
         if (playerX == playerBody[i][0] && playerY == playerBody[i][1]) {
-            gameOver = true
-            alert("Game Over")
-        }
+            gameOver = true        }
     }
     check1 = 1
 }
 
 // Loads the canvas and allows the player to move the snake
-function changeDir(e) {
-    if ((e.code == 'ArrowUp' || e.code == 'KeyW') && speedY != 1 && check1 == 1) {
-        speedX = 0
-        speedY = -1
-        check1 = 0
-        snakeHead.src = "img/originalsnake/BackSnakeHead.png";
-        snakeTail.src = "img/originalsnake/BackSnakeTail.png";
+function keyboardInput(e) {
+    if ((e.code == 'ArrowUp' || e.code == 'KeyW') && speedY !== 1 && check1 === 1) {
+        moveSnake(0, -1, "img/originalsnake/BackSnakeHead.png", "img/originalsnake/BackSnakeTail.png");
     }
-    if ((e.code == 'ArrowDown' || e.code == 'KeyS') && speedY != -1 && check1 == 1) {
-        speedX = 0
-        speedY = 1
-        check1 = 0
-        snakeHead.src = "img/originalsnake/ForwardSnakeHead.png";
-        snakeTail.src = "img/originalsnake/ForwardSnakeTail.png";
+    if ((e.code == 'ArrowDown' || e.code == 'KeyS') && speedY !== -1 && check1 === 1) {
+        moveSnake(0, 1, "img/originalsnake/ForwardSnakeHead.png", "img/originalsnake/ForwardSnakeTail.png");
     }
-    if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && speedX != 1 && check1 == 1) {
-        speedX = -1
-        speedY = 0
-        check1 = 0
-        snakeHead.src = "img/originalsnake/LeftSnakeHead.png";
-        snakeTail.src = "img/originalsnake/LeftSnakeTail.png";
+    if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && speedX !== 1 && check1 === 1) {
+        moveSnake(-1, 0, "img/originalsnake/LeftSnakeHead.png", "img/originalsnake/LeftSnakeTail.png");
     }
-    if ((e.code == 'ArrowRight' || e.code == 'KeyD') && speedX != -1 && check1 == 1) {
-        speedX = 1
-        speedY = 0
-        check1 = 0
-        snakeHead.src = "img/originalsnake/RightSnakeHead.png";
-        snakeTail.src = "img/originalsnake/RightSnakeTail.png";
+    if ((e.code == 'ArrowRight' || e.code == 'KeyD') && speedX !== -1 && check1 === 1) {
+        moveSnake(1, 0, "img/originalsnake/RightSnakeHead.png", "img/originalsnake/RightSnakeTail.png");
     }
 }
+
+function moveSnake(x, y, headImg, tailImg) {
+    speedX = x;
+    speedY = y;
+    check1 = 0;
+    snakeHead.src = headImg;
+    snakeTail.src = tailImg;
+}
+
+function controllerInput() {
+    const gamepads = navigator.getGamepads();
+    if (!gamepads) return;
+
+    const gp = gamepads[0]; // Get the first connected gamepad
+    if (!gp) return;
+
+    // D-pad buttons
+    let up = gp.buttons[12].pressed;
+    let down = gp.buttons[13].pressed;
+    let left = gp.buttons[14].pressed;
+    let right = gp.buttons[15].pressed;
+    const startButton = gp.buttons[9];
+
+    if (startButton.pressed) {
+        location.reload()
+    }
+
+    // Joysticks
+    let axisX = gp.axes[0]; // Left Right
+    let axisY = gp.axes[1]; // Up Down
+    const threshold = 0.5; // Deadzone
+
+    if ((up || axisY < -threshold) && speedY !== 1 && check1 === 1) {
+        moveSnake(0, -1, "img/originalsnake/BackSnakeHead.png", "img/originalsnake/BackSnakeTail.png");
+    }
+    if ((down || axisY > threshold) && speedY !== -1 && check1 === 1) {
+        moveSnake(0, 1, "img/originalsnake/ForwardSnakeHead.png", "img/originalsnake/ForwardSnakeTail.png");
+    }
+    if ((left || axisX < -threshold) && speedX !== 1 && check1 === 1) {
+        moveSnake(-1, 0, "img/originalsnake/LeftSnakeHead.png", "img/originalsnake/LeftSnakeTail.png");
+    }
+    if ((right || axisX > threshold) && speedX !== -1 && check1 === 1) {
+        moveSnake(1, 0, "img/originalsnake/RightSnakeHead.png", "img/originalsnake/RightSnakeTail.png");
+    }
+
+    requestAnimationFrame(controllerInput);
+}
+
+window.addEventListener("gamepadconnected", () => {
+    console.log("My wrist no longer hurts, kinda awkward to use though. Probably just because I'm not used to it.");
+    requestAnimationFrame(controllerInput);
+})
 
 // Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
