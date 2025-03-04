@@ -1,8 +1,40 @@
-<!-- Template for the chat page -->
 <%- include('partials/header') %>
 
     <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Chat with the World</h1>
+                    <form id="chat-form">
+                        <div class="form-group">
+                            <label for="user-input">Your Message:</label>
+                            <input type="text" class="form-control" id="user-input"
+                                placeholder="Type your message here...">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                    <div id="chat-messages" class="mt-4">
+                        <!-- Chat messages will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <script>
+            document.getElementById('chat-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Stop the form from submitting the usual way
+                const userInput = document.getElementById('user-input').value; // Get the user's message
+                if (userInput.trim() === '') return; // If the message is empty, do nothing
+
+                // Create a new div for the user's message
+                const chatMessages = document.getElementById('chat-messages');
+                const userMessageDiv = document.createElement('div');
+                userMessageDiv.className = 'user-message';
+                userMessageDiv.textContent = 'You: ' + userInput;
+                chatMessages.appendChild(userMessageDiv); // Add the new message to the chat
+
+                // Clear the input field
+                document.getElementById('user-input').value = '';
+            });
+        </script>
     </body>
-
-    <%- include('partials/footer') %>
