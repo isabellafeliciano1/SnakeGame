@@ -116,10 +116,13 @@ function gameUpdate() {
     // Makes sure the snake doesn't run into itself -->
     for (let i = 0; i < playerBody.length; i++) {
         if (playerX == playerBody[i][0] && playerY == playerBody[i][1]) {
-            gameOver = true        }
+            gameOver = true
+        }
     }
     check1 = 1
 }
+
+
 
 // Loads the canvas and allows the player to move the snake
 function keyboardInput(e) {
