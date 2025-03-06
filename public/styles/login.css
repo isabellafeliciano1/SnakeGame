@@ -1,40 +1,35 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #aaf069;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
+    font-family: Arial, sans-serif; 
+    background-color: #aaf069; 
+    display: flex; /*Changes the display of the body */
+    justify-content: center; /*Centers the text box */
+    align-items: center; /*Shortens the text box */
+    height: 100vh; 
+  }
 
 form {
-    background-color: #c4f399;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    display: flex;
-    flex-direction: column;
+    background-color: #c4f399; 
+    padding: 20px; 
+    border-radius: 8px; /*Rounds the corners of the form */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1); /*Adds a shadow to the form */
+    width: 300px; 
+    display: flex; /*Changes the display of the form */
+    flex-direction: column; /*Makes the buttons go up + down */
 }
 
-input[type="text"],
-input[type="password"] {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+input[type="text"], 
+input[type="password"] { 
+    margin-bottom: 10px; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
 }
 
-input[type="submit"] {
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    background-color: #107938;
-    color: white;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #107938;
+input[type="submit"] { 
+    padding: 10px; 
+    border: none; 
+    border-radius: 4px; 
+    background-color: #107938; 
+    color: white; 
+    cursor: pointer; 
 }
