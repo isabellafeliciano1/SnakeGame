@@ -1,4 +1,5 @@
 body {
+    flex-direction: column;
     font-family: Arial, sans-serif; 
     background-color: #aaf069; 
     display: flex; /*Changes the display of the body */
