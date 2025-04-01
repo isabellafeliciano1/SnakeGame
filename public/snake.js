@@ -12,6 +12,9 @@ let playerBody = []
 let foodX
 let foodY
 let gameOver = false
+let scored = false
+let points = -1
+let xhttps = new XMLHttpRequest()
 
 // Load the snake head
 const snakeHead = new Image();
@@ -57,10 +60,20 @@ window.onload = function () {
     setInterval(gameUpdate, 1000 / 15)
 }
 
+function highScore(){
+    alert(`Congrats your final score is ${points}`)
+    username = prompt('Can I have your name for the leaderboard?')
+        xhttps.open('POST', '/highScore', true);
+        xhttps.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttps.send(`name=${username}&score=${points}`);
+        scored = true
+}
+
 // Stops the game when the snake runs into itself or the wall AND resets the game
 function gameUpdate() {
     if (gameOver) {
-        return
+        if (!scored) highScore()
+            return
     }
 
     // Changes the background color AND lets the snake move freely
@@ -193,6 +206,7 @@ window.addEventListener("gamepadconnected", () => {
 
 // Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
+    points++
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
     //Spawns fruit randomly 

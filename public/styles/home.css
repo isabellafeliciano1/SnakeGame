@@ -2,6 +2,7 @@ body {
     background-color: #00530e; 
     font-family: 'Comic Sans MS', cursive, sans-serif; 
     text-align: center;
+    align-items: center;
     color: #ffffff;
 }
 
@@ -24,6 +25,8 @@ p {
     display: flex; /*Displays the links horizontally */
     flex-direction: column; /*Stacks the links vertically */
     gap: 15px; /*Adds space between the links */
+    width: 200px;
+    margin: auto;
 }
 
 .cute-button {

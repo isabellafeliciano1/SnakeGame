@@ -3,12 +3,30 @@ const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
 
 // Create a new SQLite database connection
+// User database
 const db = new sqlite3.Database('./data/database.db', (err) => {
   if (err) {
     return console.error(err.message);
   }
   console.log('Connected to the database.');
 });
+
+const hdb = new sqlite3.Database('./data/highScore.db', (err) => {
+  if (err) {
+    console.error('Error making db:', err.message);
+} else {
+    //Remember to get these from DBsqlite when performing a command to the db
+    hdb.run(`CREATE TABLE IF NOT EXISTS scores (
+        uid INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        score INTEGER NOT NULL
+    )`, (err) => {
+        if (err) {
+            console.error('Error:', err.message);
+        }
+    });
+}
+})
 
 // Define the route handlers
 function index(req, res) {
@@ -37,6 +55,27 @@ function logout(req, res) {
   req.session.destroy();
   res.redirect('/')
 
+}
+
+function highScore(req, res) {
+  hdb.all("SELECT * FROM scores ORDER BY score DESC LIMIT 10", [], (err, rows) => {
+  res.render('highScore', { scores: rows });
+});
+}
+
+function posthighScore(req, res) {
+  var name = req.body.name
+  var score = req.body.score;
+  console.log(name)
+  console.log(score)
+
+    //making sure that names and scores aren't blank
+    if (name =='null'){
+      name = 'anonymous'
+    }
+    hdb.run(`INSERT INTO scores ( name, score) VALUES ( ?, ?)`, [name, score], (err) => {
+        res.redirect('highScores');
+    });
 }
 
 // Function to handle login and registration
@@ -108,5 +147,7 @@ module.exports = {
   isAuthenticated,
   home,
   game,
+  highScore,
+  posthighScore,
   logout
 }
