@@ -58,10 +58,20 @@ window.onload = function () {
     setInterval(gameUpdate, 1000 / 15)
 }
 
+function highScore(){
+    alert(`Congrats your final score is ${points}`)
+    username = prompt('Can I have your name for the leaderboard?')
+        xhttps.open('POST', '/highScore', true);
+        xhttps.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhttps.send(`name=${username}&score=${points}`);
+        scored = true
+}
+
 // Stops the game when the snake runs into itself or the wall AND resets the game
 function gameUpdate() {
     if (gameOver) {
-        return
+        if (!scored) highScore()
+            return
     }
 
     // Changes the background color AND lets the snake move freely
@@ -99,12 +109,13 @@ function gameUpdate() {
         //if this is the last body part, draw the tail
         if (i == playerBody.length - 1) {
             //if the previous body part is above this one, draw the downward tail image
+            //let the tail face the last body part
+            
             context.drawImage(snakeTail, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
             //else if the previous part is to the right... etc.. etc...
         } else {
             //else draw a body part
             context.drawImage(snakeBody, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
-
         }
     }
 
@@ -134,10 +145,9 @@ function gameUpdate() {
     check1 = 1
 }
 
-
-
 // Loads the canvas and allows the player to move the snake
 function keyboardInput(e) {
+    console.log(e)
     if ((e.code == 'ArrowUp' || e.code == 'KeyW') && speedY !== 1 && check1 === 1) {
         moveSnake(0, -1, "img/originalsnake/BackSnakeHead.png", "img/originalsnake/BackSnakeTail.png");
     }
@@ -200,15 +210,15 @@ function controllerInput() {
 }
 
 window.addEventListener("gamepadconnected", () => {
-    console.log("My wrist no longer hurts, kinda awkward to use though. Probably just because I'm not used to it.");
     requestAnimationFrame(controllerInput);
 })
 
 // Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
+    points++
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
-    //Spawns fruit randomly || Incomplete
+    //Spawns fruit randomly 
     rand = Math.floor(Math.random() * 8);
     var fruity = fruits[rand]
     fruit.src = fruity

@@ -22,13 +22,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // Define routes
-app.get('/', routes.index);
+app.get('/', routes.login);
 app.get('/chat', routes.chat);
 app.get('/login', routes.login);
 app.post('/login', routes.postLogin);
 app.get('/home', routes.home)
 app.get('/game', routes.game)
+app.get('/highScore', routes.highScore)
+app.post('/highScore', routes.posthighScore)
 app.get('/logout', routes.logout)
+
 
 // Start the server
 app.listen(PORT, () => { });
