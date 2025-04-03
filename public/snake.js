@@ -12,6 +12,7 @@ let playerBody = []
 let foodX
 let foodY
 let gameOver = false
+let score = 0
 
 // Load the snake head
 const snakeHead = new Image();
@@ -73,6 +74,7 @@ function gameUpdate() {
     if (playerX == foodX && playerY == foodY) {
         playerBody.push([foodX, foodY])
         foodSpawn()
+        score = playerBody.length
     }
 
     // When the snake eats the fruit, it adds a new segment to the snake
@@ -110,13 +112,23 @@ function gameUpdate() {
     // Makes sure the snake doesn't run into the walls        
     if (playerX < 0 || playerX >= rows * spaceSize || playerY < 0 || playerY >= columns * spaceSize) {
         gameOver = true
-        // alert("Game Over")
+        context.fillRect( 0, 0, canvas.width, canvas.height)
+        context.fillStyle = "white"
+        context.font = "50px Arial"
+        context.fillText("Score: " + score, canvas.width / 2 - 150, canvas.height /
+            2)
     }
 
     // Makes sure the snake doesn't run into itself -->
     for (let i = 0; i < playerBody.length; i++) {
         if (playerX == playerBody[i][0] && playerY == playerBody[i][1]) {
             gameOver = true
+            context.fillRect( 0, 0, canvas.width, canvas.height)
+            context.fillStyle = "white"
+            context.font = "50px Arial"
+            context.fillText("Score: " + score, canvas.width / 2 - 150, canvas.height /
+                2)
+    
         }
     }
     check1 = 1

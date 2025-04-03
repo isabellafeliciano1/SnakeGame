@@ -9,6 +9,8 @@
         <!-- This is the home page with links to the game and chat page -->
         <div class="container">
             <h1>Welcome to Snake Game!</h1>
+            <img id="snake" src="/img/SnakeMenu.png" style="position: absolute; top: 50px; left: 0; width: 100px;">
+
             <p>Created by: The Garter company!</p>
             <p>Choose an option below:</p>
             <div class="links">
@@ -18,5 +20,22 @@
             </div>
         </div>
     </body>
+    <script>
+        const snake = document.getElementById('snake');
+        let position = 0;
+        const screenWidth = window.innerWidth;
+
+        function moveSnake() {
+            position += 5;
+            if (position > screenWidth) {
+                position = -100; // Reset position to start from the left
+            }
+            snake.style.left = position + 'px';
+            requestAnimationFrame(moveSnake);
+        }
+
+        moveSnake();
+    </script>
+
 
     <%- include('partials/footer') %>
