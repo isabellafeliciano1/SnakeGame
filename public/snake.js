@@ -57,7 +57,7 @@ window.onload = function () {
     context = canvas.getContext("2d")
     foodSpawn()
     document.addEventListener("keydown", keyboardInput)
-    setInterval(gameUpdate, 1000 / 15)
+    setInterval(gameUpdate, 1000 / 10)
 }
 
 function highScore(){
