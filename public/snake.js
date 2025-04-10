@@ -15,6 +15,20 @@ let gameOver = false
 let scored = false
 let points = -1
 let xhttps = new XMLHttpRequest()
+let gameInterval;  // So we can control when the game starts
+let gameStarted = false;
+let difficultyScreen = document.createElement("div");
+difficultyScreen.id = "difficultyScreen";
+difficultyScreen.innerHTML = `
+    <h1>Select Difficulty</h1>
+    <button onclick="startGame(1)">Isabella Mode</button>
+    <button onclick="startGame(10)">Very Easy</button>
+    <button onclick="startGame(15)">Easy</button>
+    <button onclick="startGame(25)">Normal</button>
+`;
+
+document.body.appendChild(difficultyScreen);
+
 
 // Load the snake head
 const snakeHead = new Image();
@@ -57,7 +71,6 @@ window.onload = function () {
     context = canvas.getContext("2d")
     foodSpawn()
     document.addEventListener("keydown", keyboardInput)
-    setInterval(gameUpdate, 1000 / 15)
 }
 
 function highScore(){
@@ -67,6 +80,14 @@ function highScore(){
         xhttps.send(`name=${username}&score=${points}`);
         scored = true
 }
+
+function startGame(speed) {
+    if (gameStarted) return;
+    gameStarted = true;
+    difficultyScreen.remove();
+    gameInterval = setInterval(gameUpdate, 1000 / speed);
+}
+
 
 // Stops the game when the snake runs into itself or the wall AND resets the game
 function gameUpdate() {
