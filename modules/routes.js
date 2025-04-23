@@ -14,18 +14,18 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
 const hdb = new sqlite3.Database('./data/highScore.db', (err) => {
   if (err) {
     console.error('Error making db:', err.message);
-} else {
+  } else {
     //Remember to get these from DBsqlite when performing a command to the db
     hdb.run(`CREATE TABLE IF NOT EXISTS scores (
         uid INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         score INTEGER NOT NULL
     )`, (err) => {
-        if (err) {
-            console.error('Error:', err.message);
-        }
+      if (err) {
+        console.error('Error:', err.message);
+      }
     });
-}
+  }
 })
 
 // Define the route handlers
@@ -59,8 +59,8 @@ function logout(req, res) {
 
 function highScore(req, res) {
   hdb.all("SELECT * FROM scores ORDER BY score DESC LIMIT 10", [], (err, rows) => {
-  res.render('highScore', { scores: rows });
-});
+    res.render('highScore', { scores: rows });
+  });
 }
 
 function posthighScore(req, res) {
@@ -69,13 +69,13 @@ function posthighScore(req, res) {
   console.log(name)
   console.log(score)
 
-    //making sure that names and scores aren't blank
-    if (name =='null'){
-      name = 'anonymous'
-    }
-    hdb.run(`INSERT INTO scores ( name, score) VALUES ( ?, ?)`, [name, score], (err) => {
-        res.redirect('highScores');
-    });
+  //making sure that names and scores aren't blank
+  if (name == 'null') {
+    name = 'anonymous'
+  }
+  hdb.run(`INSERT INTO scores ( name, score) VALUES ( ?, ?)`, [name, score], (err) => {
+    res.redirect('highScores');
+  });
 }
 
 // Function to handle login and registration

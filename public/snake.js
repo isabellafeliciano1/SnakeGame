@@ -21,10 +21,10 @@ let difficultyScreen = document.createElement("div");
 difficultyScreen.id = "difficultyScreen";
 difficultyScreen.innerHTML = `
     <h1>Select Difficulty</h1>
-    <button onclick="startGame(1)">Isabella Mode</button>
-    <button onclick="startGame(10)">Very Easy</button>
-    <button onclick="startGame(15)">Easy</button>
-    <button onclick="startGame(25)">Normal</button>
+    <button onclick="startGame(1)">Very Easy</button>
+    <button onclick="startGame(10)">Easy</button>
+    <button onclick="startGame(15)">Normal</button>
+    <button onclick="startGame(25)">Extreme</button>
 `;
 
 document.body.appendChild(difficultyScreen);
@@ -73,12 +73,12 @@ window.onload = function () {
     document.addEventListener("keydown", keyboardInput)
 }
 
-function highScore(){
+function highScore() {
     username = prompt('Can I have your name for the leaderboard?')
-        xhttps.open('POST', '/highScore', true);
-        xhttps.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhttps.send(`name=${username}&score=${points}`);
-        scored = true
+    xhttps.open('POST', '/highScore', true);
+    xhttps.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhttps.send(`name=${username}&score=${points}`);
+    scored = true
 }
 
 function startGame(speed) {
@@ -93,7 +93,7 @@ function startGame(speed) {
 function gameUpdate() {
     if (gameOver) {
         if (!scored) highScore()
-            return
+        return
     }
 
     // Changes the background color AND lets the snake move freely
@@ -129,9 +129,7 @@ function gameUpdate() {
     for (let i = 0; i < playerBody.length; i++) {
         //if this is the last body part, draw the tail
         if (i == playerBody.length - 1) {
-            //if the previous body part is above this one, draw the downward tail image
-            //let the tail face the last body part
-            
+            //if the previous body part is above this one, draw the downward tail image, let the tail face the last body part
             context.drawImage(snakeTail, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
             //else if the previous part is to the right... etc.. etc...
         } else {
@@ -144,7 +142,7 @@ function gameUpdate() {
     // Makes sure the snake doesn't run into the walls        
     if (playerX < 0 || playerX >= rows * spaceSize || playerY < 0 || playerY >= columns * spaceSize) {
         gameOver = true
-        context.fillRect( 0, 0, canvas.width, canvas.height)
+        context.fillRect(0, 0, canvas.width, canvas.height)
         context.fillStyle = "white"
         context.font = "50px Arial"
         context.fillText("Score: " + points, canvas.width / 2 - 150, canvas.height /
@@ -155,12 +153,12 @@ function gameUpdate() {
     for (let i = 0; i < playerBody.length; i++) {
         if (playerX == playerBody[i][0] && playerY == playerBody[i][1]) {
             gameOver = true
-            context.fillRect( 0, 0, canvas.width, canvas.height)
+            context.fillRect(0, 0, canvas.width, canvas.height)
             context.fillStyle = "white"
             context.font = "50px Arial"
             context.fillText("Score: " + points, canvas.width / 2 - 150, canvas.height /
                 2)
-    
+
         }
     }
     check1 = 1
