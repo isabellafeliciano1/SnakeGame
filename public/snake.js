@@ -13,7 +13,8 @@ let foodX
 let foodY
 let gameOver = false
 let scored = false
-let points = -1
+let scaling = false
+let points = 0
 let xhttps = new XMLHttpRequest()
 let gameInterval;  // So we can control when the game starts
 let gameStarted = false;
@@ -25,6 +26,7 @@ difficultyScreen.innerHTML = `
     <button onclick="startGame(10)">Easy</button>
     <button onclick="startGame(15)">Normal</button>
     <button onclick="startGame(25)">Extreme</button>
+    <button onclick="startGame(5), scaling = true">Level Mode</button>
 `;
 
 document.body.appendChild(difficultyScreen);
@@ -106,6 +108,13 @@ function gameUpdate() {
     if (playerX == foodX && playerY == foodY) {
         playerBody.push([foodX, foodY])
         foodSpawn()
+        points++
+        if (scaling) {
+            clearInterval(gameInterval);
+            const newSpeed = Math.max(5, 5 + Math.floor(points * 0.2));
+            gameInterval = setInterval(gameUpdate, 1000 / newSpeed);
+        }
+
     }
 
     // When the snake eats the fruit, it adds a new segment to the snake
@@ -234,7 +243,6 @@ window.addEventListener("gamepadconnected", () => {
 
 // Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
-    points++
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
     //Spawns fruit randomly 
