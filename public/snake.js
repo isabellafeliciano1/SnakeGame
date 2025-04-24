@@ -57,6 +57,9 @@ const fruits = [
     "img/fruits/peach.png",
     "img/fruits/apple.png",
     "img/fruits/watermelon.png",
+    "img/fruits/dragonFruit/png",
+    "img/fruits/starFruit/png",
+    "img/fruits/avacado/png",
 ]
 
 // Load the background
@@ -238,7 +241,7 @@ function foodSpawn() {
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
     //Spawns fruit randomly 
-    rand = Math.floor(Math.random() * 8);
+    rand = Math.floor(Math.random() * fruits.length);
     var fruity = fruits[rand]
     fruit.src = fruity
 }
