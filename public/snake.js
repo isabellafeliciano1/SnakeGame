@@ -13,7 +13,8 @@ let foodX
 let foodY
 let gameOver = false
 let scored = false
-let points = -1
+let scaling = false
+let points = 0
 let xhttps = new XMLHttpRequest()
 let gameInterval;  // So we can control when the game starts
 let gameStarted = false;
@@ -25,6 +26,7 @@ difficultyScreen.innerHTML = `
     <button onclick="startGame(10)">Easy</button>
     <button onclick="startGame(15)">Normal</button>
     <button onclick="startGame(25)">Extreme</button>
+    <button onclick="startGame(5), scaling = true">Level Mode</button>
 `;
 
 document.body.appendChild(difficultyScreen);
@@ -57,6 +59,17 @@ const fruits = [
     "img/fruits/peach.png",
     "img/fruits/apple.png",
     "img/fruits/watermelon.png",
+    "img/fruits/dragonFruit/png",
+    "img/fruits/starFruit/png",
+    "img/fruits/avacado/png",
+    "img/fruits/pineapple/png",
+    "img/fruits/coconut/png",
+    "img/fruits/papaya/png",
+    "img/fruits/lychee/png",
+    "img/fruits/mango/png",
+    "img/fruits/pomegranate/png",
+    "img/fruits/strawberry/png",
+    "img/fruits/blueberry/png",
 ]
 
 // Load the background
@@ -92,28 +105,34 @@ function startGame(speed) {
 // Stops the game when the snake runs into itself or the wall AND resets the game
 function gameUpdate() {
     if (gameOver) {
-        if (!scored) highScore()
-        return
+        if (!scored) highScore();
+        return;
     }
 
     // Changes the background color AND lets the snake move freely
-    context.drawImage(map, 0, 0, canvas.width, canvas.height)
+    context.drawImage(map, 0, 0, canvas.width, canvas.height);
 
     // Spawns the fruit
     context.drawImage(fruit, foodX, foodY, spaceSize, spaceSize);
 
     // Check if the snake eats the fruit
     if (playerX == foodX && playerY == foodY) {
-        playerBody.push([foodX, foodY])
-        foodSpawn()
+        playerBody.push([foodX, foodY]); // Add a new segment to the snake
+        foodSpawn();
+        points++;
+        if (scaling) {
+            clearInterval(gameInterval);
+            const newSpeed = Math.max(5, 5 + Math.floor(points * 0.2));
+            gameInterval = setInterval(gameUpdate, 1000 / newSpeed);
+        }
     }
 
-    // When the snake eats the fruit, it adds a new segment to the snake
-    for (let i = playerBody.length - 1; i >= 0; i--) {
-        playerBody[i] = playerBody[i - 1];
+    // Update the snake's body segments
+    for (let i = playerBody.length - 1; i > 0; i--) {
+        playerBody[i] = playerBody[i - 1]; // Shift each segment to the position of the previous one
     }
 
-    // Allows the snake to grow when it eats the fruit
+    // Update the head of the snake
     if (playerBody.length) {
         playerBody[0] = [playerX, playerY];
     }
@@ -123,7 +142,7 @@ function gameUpdate() {
     playerY += speedY * spaceSize;
 
     // Lets the snake appear on the canvas
-    context.drawImage(snakeHead, playerX, playerY, spaceSize, spaceSize)
+    context.drawImage(snakeHead, playerX, playerY, spaceSize, spaceSize);
 
     // Loop through the list of body parts and draw each one
     for (let i = 0; i < playerBody.length; i++) {
@@ -234,11 +253,10 @@ window.addEventListener("gamepadconnected", () => {
 
 // Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
-    points++
     foodX = Math.floor(Math.random() * rows) * spaceSize
     foodY = Math.floor(Math.random() * columns) * spaceSize
     //Spawns fruit randomly 
-    rand = Math.floor(Math.random() * 8);
+    rand = Math.floor(Math.random() * fruits.length);
     var fruity = fruits[rand]
     fruit.src = fruity
 }
