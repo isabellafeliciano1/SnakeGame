@@ -87,11 +87,9 @@ window.onload = function () {
 }
 
 function highScore() {
-    username = prompt('Can I have your name for the leaderboard?')
     xhttps.open('POST', '/highScore', true);
     xhttps.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhttps.send(`name=${username}&score=${points}`);
-    scored = true
 }
 
 function startGame(speed) {
