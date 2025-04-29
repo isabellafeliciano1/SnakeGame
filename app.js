@@ -17,12 +17,18 @@ const sessionMiddleware = session({
 });
 
 // Set the view engine to EJS
+app.use(session({
+    secret: 'Wuthering',
+    resave: false,
+    saveUninitialized: false
+}));
+
 app.use(sessionMiddleware);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 // Define routes
-app.get('/', routes.login);
+app.get('/', routes.isAuthenticated, routes.index);
 app.get('/chat', routes.chat);
 app.get('/login', routes.login);
 app.post('/login', routes.postLogin);
