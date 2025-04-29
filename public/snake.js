@@ -89,7 +89,8 @@ window.onload = function () {
 function highScore() {
     xhttps.open('POST', '/highScore', true);
     xhttps.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhttps.send(`name=${username}&score=${points}`);
+    xhttps.send(`score=${points}`);
+    scored = true
 }
 
 function startGame(speed) {
