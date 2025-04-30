@@ -62,14 +62,15 @@ function game(req, res) {
 
 function login(req, res) {
   console.log(req.query.token)
-	if (req.query.token) {
-		let tokenData = jwt.verify(req.query.token, PUBLIC_KEY, { algorithms: ['RS256'] })
-		req.session.token = tokenData
-		req.session.user = tokenData.username
-		res.redirect('/')
-	} else {
-		res.redirect(`${AUTH_URL}/oauth?redirectURL=${THIS_URL}`)
-	}}
+  if (req.query.token) {
+    let tokenData = jwt.verify(req.query.token, PUBLIC_KEY, { algorithms: ['RS256'] })
+    req.session.token = tokenData
+    req.session.user = tokenData.username
+    res.redirect('/')
+  } else {
+    res.redirect(`${AUTH_URL}/oauth?redirectURL=${THIS_URL}`)
+  }
+}
 
 function logout(req, res) {
   req.session.destroy();
