@@ -1,4 +1,25 @@
 <%- include('partials/header') %>
+    <style>
+        .cute-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-align: center;
+        }
+
+        .cute-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+    </style>
 
     <head>
         <title>Home</title>
@@ -14,13 +35,15 @@
             <p>Created by: The Garter company!</p>
             <p>Choose an option below:</p>
             <div class="links">
-                <a href="/game" class="cute-button">Go to the Game</a>
-                <a href="/chat" class="cute-button">Go to the Chat</a>
-                <a href="/highScore" class="cute-button">Go to Top Scores</a>
+                <a href="/game" class="cute-button">Play the Game!</a>
+                <a href="/chat" class="cute-button">World Chat</a>
+                <a href="/highScore" class="cute-button">View Top Scores</a>
+                <a href="/index.html" class="cute-button">Go to The Shop</a>
                 <a href="/logout" class="cute-button">Logout</a>
             </div>
         </div>
     </body>
+    
     <script>
         const snake = document.getElementById('snake');
         let position = 0;
@@ -37,6 +60,5 @@
 
         moveSnake();
     </script>
-
 
     <%- include('partials/footer') %>
