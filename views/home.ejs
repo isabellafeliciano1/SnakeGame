@@ -29,23 +29,28 @@
     <body>
         <!-- This is the home page with links to the game and chat page -->
         <div class="container">
+            <br>
             <h1>Welcome to Snake Game!</h1>
-            <img id="snake" src="/img/SnakeMenu.png" style="position: absolute; top: 50px; left: 0; width: 100px;">
+            <img id="snake" src="/img/SnakeMenu.png" style="position: absolute; top: 50px; left: 0; width: 200px;">
 
+            
             <p>Created by: The Garter company!</p>
             <p>Choose an option below:</p>
             <div class="links">
                 <a href="/game" class="cute-button">Play the Game!</a>
                 <a href="/chat" class="cute-button">World Chat</a>
                 <a href="/highScore" class="cute-button">View Top Scores</a>
-                <a href="/index.html" class="cute-button">Go to The Shop</a>
+                <a href="/shop.html" class="cute-button">Go to The Shop</a>
                 <a href="/logout" class="cute-button">Logout</a>
             </div>
+
+            <img id="snake2" src="/img/SnakeMenu.png" style="position:absolute ;top: 850px; left: 0; width: 200px;">
         </div>
     </body>
-    
+
     <script>
         const snake = document.getElementById('snake');
+        const snake2 = document.getElementById('snake2');
         let position = 0;
         const screenWidth = window.innerWidth;
 
@@ -55,10 +60,13 @@
                 position = -100; // Reset position to start from the left
             }
             snake.style.left = position + 'px';
+            snake2.style.left = position + 'px';
             requestAnimationFrame(moveSnake);
         }
 
         moveSnake();
+
+        
     </script>
 
     <%- include('partials/footer') %>
