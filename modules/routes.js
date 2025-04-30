@@ -1,6 +1,19 @@
 // Import the required modules
 const sqlite3 = require('sqlite3').verbose();
 const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const AUTH_URL = 'https://formbeta.yorktechapps.com'; // ... or the address to the instance of fbjs you wish to connect to
+const THIS_URL = 'http://localhost:3000/login'; // ... or whatever the address to your application is
+const PUBLIC_KEY = `-----BEGIN PUBLIC KEY----- 
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArY7ATw0h8nGw97RGNyQu 
+CjknRHvTejTfWsRX4gSCZg1WSptruk1l0LtYh3P+lA/ux2vDu50fzzub0+t97Ssl 
+q2VCi+q25uEN5KUFX7hxxmwFvK/5GqsJ/NoM8LQXycnGVtaWZATaE58vLbdZ/nQK 
+bPiqZ8GOKcvRbPVK9z/QMvuB6E6NOq9bRioQZeESDZP9uxiqQ7DT/1M275pFCcE3 
+DYrw1aoRqQ9R9YrglsSAXuQcYphKr6O0b0OouokyUex/AyWa/GGQl8Ws1XIe2WZG 
+UJV29AyzGGU1mSFJV563+N4o0cF/6tCUiy/mikPBVW08mUkPg9qjy/yd5cLChBi8 
+ZwIDAQAB 
+-----END PUBLIC KEY----- `
+
 
 // Create a new SQLite database connection
 // User database
@@ -8,25 +21,29 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
   if (err) {
     return console.error(err.message);
   }
-  else {
+  console.log('Connected to the database.');
+});
+
+const hdb = new sqlite3.Database('./data/highScore.db', (err) => {
+  if (err) {
+    console.error('Error making db:', err.message);
+  } else {
     //Remember to get these from DBsqlite when performing a command to the db
-    db.run(`CREATE TABLE IF NOT EXISTS scores (
-      uid INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      score INTEGER NOT NULL
-  )`, (err) => {
+    hdb.run(`CREATE TABLE IF NOT EXISTS scores (
+        uid INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        score INTEGER NOT NULL
+    )`, (err) => {
       if (err) {
         console.error('Error:', err.message);
       }
     });
   }
-  console.log('Connected to the database.');
-});
-
+})
 
 // Define the route handlers
 function index(req, res) {
-  res.render('index', { user: req.session.user });
+  res.render('home')
 }
 
 function chat(req, res, next) {
@@ -44,7 +61,15 @@ function game(req, res) {
 }
 
 function login(req, res) {
-  res.render('login');
+  console.log(req.query.token)
+  if (req.query.token) {
+    let tokenData = jwt.verify(req.query.token, PUBLIC_KEY, { algorithms: ['RS256'] })
+    req.session.token = tokenData
+    req.session.user = tokenData.username
+    res.redirect('/')
+  } else {
+    res.redirect(`${AUTH_URL}/oauth?redirectURL=${THIS_URL}`)
+  }
 }
 
 function logout(req, res) {
@@ -54,23 +79,26 @@ function logout(req, res) {
 }
 
 function highScore(req, res) {
-  db.all("SELECT * FROM scores ORDER BY score DESC LIMIT 10", [], (err, rows) => {
+  hdb.all("SELECT * FROM scores ORDER BY score DESC LIMIT 10", [], (err, rows) => {
     res.render('highScore', { scores: rows });
   });
 }
 
 function posthighScore(req, res) {
-  var name = req.body.name
   var score = req.body.score;
-  console.log(name)
-  console.log(score)
+  var name = req.session.user; // Get username from session
 
-  //making sure that names and scores aren't blank
-  if (name == 'null') {
-    name = 'anonymous'
+  if (!name) {
+    name = 'anonymous';
   }
-  db.run(`INSERT INTO scores ( name, score) VALUES ( ?, ?)`, [name, score], (err) => {
-    res.redirect('highScores');
+
+  hdb.run(`INSERT INTO scores (name, score) VALUES (?, ?)`, [name, score], (err) => {
+    if (err) {
+      console.error('Error inserting score:', err);
+      res.status(500).send('Error saving score');
+    } else {
+      res.redirect('/highScore');
+    }
   });
 }
 
