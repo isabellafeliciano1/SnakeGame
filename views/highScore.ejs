@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <%- include('partials/style') %>
-<html lang="en">
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/styles/highScore.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" type="text/css" href="/styles/highScore.css">
+    </head>
 
-<body>
-    <h1>High Scores</h1>
-    <h2>These are the top 10 scorers</h2>
-    <h3>Placement, Name, Score</h3>
-    <ol>
-        <% scores.forEach(score=> { %>
-            <li>
-                <%= score.name %>,
-                    <%= score.score %>
-            </li>
-            <% }) %>
-    </ol>
-    <div class='cute-button'><a href="/home">Return to home menu</a></div>
-</body>
+    <body>
+        <h1>High Scores</h1>
+        <h2>These are the top 10 scorers</h2>
+        <h3>Placement, Name, Score</h3>
+        <ol>
+            <% scores.forEach(score=> { %>
+                <li>
+                    <%= score.name %>,
+                        <%= score.score %>
+                </li>
+                <% }) %>
+        </ol>
+        <div class='cute-button'><a href="/home">Return to home menu</a></div>
+    </body>
 
-</html>
+    </html>

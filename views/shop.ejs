@@ -1,121 +1,116 @@
 <!DOCTYPE html>
 <%- include('partials/style') %>
-<!-- 
-RENAME TO SHOP.EJS
-PUT IN VIEWS
-ADD POST IN APP.JS
-ADD TO ROUTES
-  -->
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Item Shop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
+    <html lang="en">
 
-        /* Logo and Navigation */
-        div img {
-            display: block;
-            margin: 20px auto;
-            width: 100px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Snake Item Shop</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f9;
+                color: #333;
+            }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            background-color: #333;
-            display: flex;
-            justify-content: center;
-        }
+            /* Logo and Navigation */
+            div img {
+                display: block;
+                margin: 20px auto;
+                width: 100px;
+            }
 
-        ul li {
-            position: relative;
-        }
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                background-color: #333;
+                display: flex;
+                justify-content: center;
+            }
 
-        ul li a {
-            display: block;
-            padding: 15px 20px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
+            ul li {
+                position: relative;
+            }
 
-        ul li a:hover,
-        ul li.active a {
-            background-color: #555;
-        }
+            ul li a {
+                display: block;
+                padding: 15px 20px;
+                color: #fff;
+                text-decoration: none;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
 
-        /* Dropdown Menu */
-        .sub-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #444;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+            ul li a:hover,
+            ul li.active a {
+                background-color: #555;
+            }
 
-        .sub-menu ul {
-            flex-direction: column;
-        }
+            /* Dropdown Menu */
+            .sub-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #444;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
 
-        .sub-menu ul li a {
-            padding: 10px 20px;
-        }
+            .sub-menu ul {
+                flex-direction: column;
+            }
 
-        ul li:hover .sub-menu {
-            display: block;
-        }
+            .sub-menu ul li a {
+                padding: 10px 20px;
+            }
 
-        /* Title */
-        .title {
-            text-align: center;
-            margin: 20px 0;
-        }
+            ul li:hover .sub-menu {
+                display: block;
+            }
 
-        .title h1 {
-            font-size: 36px;
-            color: #333;
-            margin: 0;
-        }
-    </style>
-</head>
+            /* Title */
+            .title {
+                text-align: center;
+                margin: 20px 0;
+            }
 
-<body>
+            .title h1 {
+                font-size: 36px;
+                color: #333;
+                margin: 0;
+            }
+        </style>
+    </head>
 
-    <ul>
-        <li class="active"><a href="/"><i class="fa fa-home"></i> Home</a></li>
-        <li><a href="#">Bronze Coin</a></li>
-        <li><a href="#">Silver Coin</a></li>
-        <li><a href="#">Gold Coin</a></li>
-        <li><a href="#">Dollar Bill</a></li>
-        <li><a href="#">Money Bag</a></li>
-        <li><a href="#">Pig Bank</a></li>
-        <li><a href="#">Diamond</a></li>
-        <li><a href="#"><i class="fa fa-caret-down"></i> More Options: <i class="fa fa-caret-down"></i></a>
-            <div class="sub-menu">
-                <ul>
-                    <li><a href="#">????</a></li>
-                    <li><a href="#">????</a></li>
-                </ul>
-            </div>
-        </li>
-    </ul>
+    <body>
 
-    <div class="title">
-        <h1>Snake Item Shop</h1>
-    </div>
-</body>
+        <ul>
+            <li class="active"><a href="/"><i class="fa fa-home"></i> Home</a></li>
+            <li><a href="#">Bronze Coin</a></li>
+            <li><a href="#">Silver Coin</a></li>
+            <li><a href="#">Gold Coin</a></li>
+            <li><a href="#">Dollar Bill</a></li>
+            <li><a href="#">Money Bag</a></li>
+            <li><a href="#">Pig Bank</a></li>
+            <li><a href="#">Diamond</a></li>
+            <li><a href="#"><i class="fa fa-caret-down"></i> More Options: <i class="fa fa-caret-down"></i></a>
+                <div class="sub-menu">
+                    <ul>
+                        <li><a href="#">????</a></li>
+                        <li><a href="#">????</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
 
-</html>
+        <div class="title">
+            <h1>Snake Item Shop</h1>
+        </div>
+    </body>
+
+    </html>
