@@ -11,6 +11,8 @@ let speedY = 0;  //speed of snake in Y coordinate.
 let playerBody = []
 let foodX
 let foodY
+let addOnX
+let addOnY
 let gameOver = false
 let scored = false
 let scaling = false
@@ -72,6 +74,17 @@ const fruits = [
     "img/fruits/blueberry.png",
 ]
 
+const addOn = new Image()
+const addOns = [
+    'img/add-ons/bronzeCoin.png',
+    'img/add-ons/silverCoin.png',
+    'img/add-ons/goldCoin.png',
+    'img/add-ons/dollarBill.png',
+    'img/add-ons/moneyBag.png',
+    'img/add-ons/pigBank.png',
+    'img/add-ons/diamond.png',
+]
+
 // Load the background
 const map = new Image()
 map.src = "img/GameMap.png"
@@ -114,6 +127,9 @@ function gameUpdate() {
     // Spawns the fruit
     context.drawImage(fruit, foodX, foodY, spaceSize, spaceSize);
 
+    // Spawns the add-on
+    context.drawImage(addOn, addOnX, addOnY, spaceSize, spaceSize);
+
     // Check if the snake eats the fruit
     if (playerX == foodX && playerY == foodY) {
         playerBody.push([foodX, foodY]); // Add a new segment to the snake
@@ -124,6 +140,12 @@ function gameUpdate() {
             const newSpeed = Math.max(5, 5 + Math.floor(points * 0.2));
             gameInterval = setInterval(gameUpdate, 1000 / newSpeed);
         }
+    }
+
+    if (playerX == addOnX && playerY == addOnY) {
+            addOnX = -200
+            addOnY = -200
+            money += 5
     }
 
     // Update the snake's body segments
@@ -258,4 +280,16 @@ function foodSpawn() {
     rand = Math.floor(Math.random() * fruits.length);
     var fruity = fruits[rand]
     fruit.src = fruity
+
+    addChance = Math.floor(Math.random() * 10) // 0-9
+    // % chance to spawn an add-on
+    if (addChance > 7) {
+        addOnX = Math.floor(Math.random() * rows) * spaceSize
+        addOnY = Math.floor(Math.random() * columns) * spaceSize
+        //Spawns add-on randomly 
+        rand = Math.floor(Math.random() * addOns.length);
+        var boost = addOns[rand]
+        addOn.src = boost
+    }
+
 }
