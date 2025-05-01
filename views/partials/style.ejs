@@ -1,0 +1,58 @@
+<head>
+    <style>
+        #bgButton {
+            position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 10px 15px;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .text-color {
+            color: var(--text-color);
+        }
+
+        a {
+            color: inherit;
+        }
+    </style>
+</head>
+</body >
+<button id="bgButton">Background Color</button>
+<script>
+    const bgColors = ['#222', '#fff', '#a5ed6e', '#7CC048'];
+    const buttonColors = ['#111', '#ccc', '#7cc048', '#a5ed6e'];
+    const buttonText = ['#fff', '#000', '#000', '#fff'];
+
+    let currentIndex = localStorage.getItem('bgColorSave') !== null
+        ? parseInt(localStorage.getItem('bgColorSave'))
+        : 0;
+
+    const bgButton = document.getElementById('bgButton');
+
+    function updateColors() {
+        document.body.style.backgroundColor = bgColors[currentIndex];
+        bgButton.style.backgroundColor = buttonColors[currentIndex];
+        bgButton.style.color = buttonText[currentIndex];
+        document.documentElement.style.setProperty('--text-color', buttonText[currentIndex]);
+    }
+
+    // Apply text-color class to all text elements except links
+    document.querySelectorAll('*').forEach(element => {
+        if (element.tagName !== 'A' && element.tagName !== 'BUTTON' && element.textContent.trim() !== '') {
+            element.classList.add('text-color');
+        }
+    });
+
+    updateColors();
+
+    bgButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % bgColors.length;
+        localStorage.setItem('bgColorSave', currentIndex);
+        updateColors();
+    });
+</script>
+</body >
