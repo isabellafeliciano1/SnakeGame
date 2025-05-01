@@ -24,11 +24,11 @@ let difficultyScreen = document.createElement("div");
 difficultyScreen.id = "difficultyScreen";
 difficultyScreen.innerHTML = `
     <h1>Select Difficulty</h1>
+    <button onclick="startGame(5), scaling = true">Progression Mode</button>
     <button onclick="startGame(1)">Very Easy</button>
     <button onclick="startGame(10)">Easy</button>
     <button onclick="startGame(15)">Normal</button>
     <button onclick="startGame(25)">Extreme</button>
-    <button onclick="startGame(5), scaling = true">Level Mode</button>
 `;
 
 document.body.appendChild(difficultyScreen);
