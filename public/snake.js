@@ -33,6 +33,21 @@ difficultyScreen.innerHTML = `
 
 document.body.appendChild(difficultyScreen);
 
+let bombs = []; // Bomb positions
+let bombCount = 4;
+let bombImage = new Image();
+bombImage.src = "img/add-ons/bomb.png"
+let explosionImage = new Image();
+explosionImage.src = "img/explosion.png"
+let isExploding = false;
+let explosionFrame = 0;
+let explosionX = 0;
+let explosionY = 0;
+const EXPLOSION_FRAME_WIDTH = 755; // Width of each frame in the sprite sheet
+const EXPLOSION_FRAME_HEIGHT = 1065; // Height of each frame in the sprite sheet
+const EXPLOSION_FRAMES_PER_ROW = 5; // Number of frames in each row of the sprite sheet
+let explosionInterval = null;
+let explosionSound = new Audio('audio/explosion.mp3');
 
 // Load the snake head
 const snakeHead = new Image();
@@ -95,6 +110,9 @@ window.onload = function () {
     canvas.height = rows * spaceSize
     canvas.width = columns * spaceSize
     context = canvas.getContext("2d")
+    if (!scaling) {
+        spawnBombs()
+    }
     foodSpawn()
     document.addEventListener("keydown", keyboardInput)
 }
@@ -113,8 +131,98 @@ function startGame(speed) {
     gameInterval = setInterval(gameUpdate, 1000 / speed);
 }
 
+// Stops stuff from spawning in other things
+function isValidPosition(x, y, checkFood = false) {
+    // Check player position
+    if (x === playerX && y === playerY) return false;
 
-// Stops the game when the snake runs into itself or the wall AND resets the game
+    // Check snake body
+    for (let segment of playerBody) {
+        if (x === segment[0] && y === segment[1]) return false;
+    }
+
+    // Check bombs only if not in scaling mode
+    if (!scaling) {
+        for (let bomb of bombs) {
+            if (x === bomb[0] && y === bomb[1]) return false;
+        }
+    }
+
+    // Check food if needed
+    if (checkFood && x === foodX && y === foodY) return false;
+
+    return true;
+}
+
+// Function to spawn bombs
+function spawnBombs() {
+    if (scaling) { return }
+    bombs = [];
+    for (let i = 0; i < bombCount; i++) {
+        let bombX, bombY;
+        let validPosition = false;
+
+        while (!validPosition) {
+            bombX = Math.floor(Math.random() * rows) * spaceSize;
+            bombY = Math.floor(Math.random() * columns) * spaceSize;
+            validPosition = isValidPosition(bombX, bombY);
+        }
+
+        bombs.push([bombX, bombY]);
+    }
+}
+
+// Function to handle player death
+function death() {
+    if (!isExploding) {
+        isExploding = true;
+        explosionX = playerX;
+        explosionY = playerY;
+        explosionFrame = 0;
+
+        explosionSound.currentTime = 0;
+        explosionSound.play();
+
+        // Stop the game loop
+        clearInterval(gameInterval);
+
+        // Start explosion animation
+        explosionInterval = setInterval(() => {
+            explosionFrame++;
+            // Redraw the game state for each frame
+            context.drawImage(map, 0, 0, canvas.width, canvas.height);
+            context.drawImage(fruit, foodX, foodY, spaceSize, spaceSize);
+            context.drawImage(addOn, addOnX, addOnY, spaceSize, spaceSize);
+            context.drawImage(snakeHead, playerX, playerY, spaceSize, spaceSize);
+            for (let i = 0; i < playerBody.length; i++) {
+                if (i == playerBody.length - 1) {
+                    context.drawImage(snakeTail, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+                } else {
+                    context.drawImage(snakeBody, playerBody[i][0], playerBody[i][1], spaceSize, spaceSize)
+                }
+            }
+            // Draw the current explosion frame
+            const sourceX = (explosionFrame % EXPLOSION_FRAMES_PER_ROW) * EXPLOSION_FRAME_WIDTH;
+            const sourceY = Math.floor(explosionFrame / EXPLOSION_FRAMES_PER_ROW) * EXPLOSION_FRAME_HEIGHT;
+            context.drawImage(
+                explosionImage,
+                sourceX, sourceY,
+                EXPLOSION_FRAME_WIDTH, EXPLOSION_FRAME_HEIGHT,
+                explosionX - spaceSize / 2, explosionY - spaceSize / 2,
+                spaceSize * 2, spaceSize * 2
+            );
+            if (explosionFrame >= 17) {
+                clearInterval(explosionInterval);
+                gameOver = true;
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.fillStyle = "white";
+                context.font = "50px Arial";
+                context.fillText("Score: " + points, canvas.width / 2 - 200, canvas.height / 2);
+            }
+        }, 50); // Faster animation (20fps)
+    }
+}
+
 function gameUpdate() {
     if (gameOver) {
         if (!scored) highScore();
@@ -123,6 +231,13 @@ function gameUpdate() {
 
     // Changes the background color AND lets the snake move freely
     context.drawImage(map, 0, 0, canvas.width, canvas.height);
+
+    // Draw bombs only if not in scaling mode
+    if (!scaling) {
+        for (let bomb of bombs) {
+            context.drawImage(bombImage, bomb[0], bomb[1], spaceSize, spaceSize);
+        }
+    }
 
     // Spawns the fruit
     context.drawImage(fruit, foodX, foodY, spaceSize, spaceSize);
@@ -143,9 +258,33 @@ function gameUpdate() {
     }
 
     if (playerX == addOnX && playerY == addOnY) {
-            addOnX = -200
-            addOnY = -200
-            money += 5
+        addOnX = -200
+        addOnY = -200
+        money += 5
+    }
+
+    let nextX = playerX + speedX * spaceSize;
+    let nextY = playerY + speedY * spaceSize;
+    //walls
+    if (nextX < 0 || nextX >= rows * spaceSize || nextY < 0 || nextY >= columns * spaceSize) {
+        death();
+        return;
+    }
+    //self
+    for (let i = 0; i < playerBody.length; i++) {
+        if (nextX == playerBody[i][0] && nextY == playerBody[i][1]) {
+            death();
+            return;
+        }
+    }
+    //bombs
+    if (!scaling) {
+        for (let bomb of bombs) {
+            if (nextX === bomb[0] && nextY === bomb[1]) {
+                death();
+                return;
+            }
+        }
     }
 
     // Update the snake's body segments
@@ -158,9 +297,9 @@ function gameUpdate() {
         playerBody[0] = [playerX, playerY];
     }
 
-    // Creates the snake AND allows it to move
-    playerX += speedX * spaceSize;
-    playerY += speedY * spaceSize;
+    // Update player position
+    playerX = nextX;
+    playerY = nextY;
 
     // Lets the snake appear on the canvas
     context.drawImage(snakeHead, playerX, playerY, spaceSize, spaceSize);
@@ -178,29 +317,6 @@ function gameUpdate() {
         }
     }
 
-    // Makes sure the canvas loads properly with all the properties -->
-    // Makes sure the snake doesn't run into the walls        
-    if (playerX < 0 || playerX >= rows * spaceSize || playerY < 0 || playerY >= columns * spaceSize) {
-        gameOver = true
-        context.fillRect(0, 0, canvas.width, canvas.height)
-        context.fillStyle = "white"
-        context.font = "50px Arial"
-        context.fillText("Score: " + points, canvas.width / 2 - 150, canvas.height /
-            2)
-    }
-
-    // Makes sure the snake doesn't run into itself -->
-    for (let i = 0; i < playerBody.length; i++) {
-        if (playerX == playerBody[i][0] && playerY == playerBody[i][1]) {
-            gameOver = true
-            context.fillRect(0, 0, canvas.width, canvas.height)
-            context.fillStyle = "white"
-            context.font = "50px Arial"
-            context.fillText("Score: " + points, canvas.width / 2 - 150, canvas.height /
-                2)
-
-        }
-    }
     check1 = 1
 }
 
@@ -274,8 +390,13 @@ window.addEventListener("gamepadconnected", () => {
 
 // Lets the fruit spawn randomly AND loads the canvas
 function foodSpawn() {
-    foodX = Math.floor(Math.random() * rows) * spaceSize
-    foodY = Math.floor(Math.random() * columns) * spaceSize
+    let validPosition = false;
+    while (!validPosition) {
+        foodX = Math.floor(Math.random() * rows) * spaceSize;
+        foodY = Math.floor(Math.random() * columns) * spaceSize;
+        validPosition = isValidPosition(foodX, foodY);
+    }
+
     //Spawns fruit randomly 
     rand = Math.floor(Math.random() * fruits.length);
     var fruity = fruits[rand]
@@ -284,12 +405,16 @@ function foodSpawn() {
     addChance = Math.floor(Math.random() * 10) // 0-9
     // % chance to spawn an add-on
     if (addChance > 7) {
-        addOnX = Math.floor(Math.random() * rows) * spaceSize
-        addOnY = Math.floor(Math.random() * columns) * spaceSize
+        validPosition = false;
+        while (!validPosition) {
+            addOnX = Math.floor(Math.random() * rows) * spaceSize;
+            addOnY = Math.floor(Math.random() * columns) * spaceSize;
+            validPosition = isValidPosition(addOnX, addOnY, true);
+        }
+
         //Spawns add-on randomly 
         rand = Math.floor(Math.random() * addOns.length);
         var boost = addOns[rand]
         addOn.src = boost
     }
-
 }
