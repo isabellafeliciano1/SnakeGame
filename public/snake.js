@@ -71,7 +71,6 @@ const fruits = [
     "img/fruits/banana.png",
     "img/fruits/cherry.png",
     "img/fruits/grape.png",
-    "img/fruits/lemon.png",
     "img/fruits/orange.png",
     "img/fruits/peach.png",
     "img/fruits/apple.png",
