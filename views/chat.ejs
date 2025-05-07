@@ -1,9 +1,17 @@
 <%- include('partials/header') %>
+    <style>
+        .container {
+            text-align: center;
+        }
+    </style>
+    <%- include('partials/style') %>
 
-    <body>
+        <body style="background-color: #f8f9fa; font-family: Arial, sans-serif;"></body>
+
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <br>
                     <h1>Chat with the World</h1>
                     <form id="chat-form">
                         <div class="form-group">
@@ -18,7 +26,13 @@
                     </div>
                 </div>
             </div>
-            <a href="/home">Click here to go home</a>
+            <button onclick="window.location.href='/home'" class="btn btn-secondary"
+                style="font-size: 1.5rem; padding: 5px 10px;">Go Home</button>
+            <style>
+                .btn {
+                    margin: 10px 5px;
+                }
+            </style>
         </div>
 
         <script>
@@ -38,4 +52,4 @@
                 document.getElementById('user-input').value = '';
             });
         </script>
-    </body>
+        </body>

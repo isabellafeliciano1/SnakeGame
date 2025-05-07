@@ -72,6 +72,10 @@ function login(req, res) {
   }
 }
 
+function shop(req, res) {
+  res.render('shop')
+}
+
 function logout(req, res) {
   req.session.destroy();
   res.redirect('/')
@@ -173,5 +177,6 @@ module.exports = {
   game,
   highScore,
   posthighScore,
-  logout
+  logout,
+  shop
 }

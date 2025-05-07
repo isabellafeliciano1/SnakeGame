@@ -37,6 +37,7 @@ app.get('/game', routes.game)
 app.get('/highScore', routes.highScore)
 app.post('/highScore', routes.posthighScore)
 app.get('/logout', routes.logout)
+app.get('/shop', routes.shop)
 
 
 // Start the server
