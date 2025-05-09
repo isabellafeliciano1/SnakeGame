@@ -49,7 +49,7 @@ app.get('/closet', (req, res) => {
 });
 
 app.get('/mapselections', (req, res) => {
-    res.send('Map Page');
+    res.render('mapselection'); // Render the mapselection.ejs file
 });
 
 // Start the server
