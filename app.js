@@ -40,17 +40,13 @@ app.get('/logout', routes.logout)
 app.get('/shop', routes.shop)
 
 // Add the /items route
-app.get('/items', (req, res) => {
-    res.render('items'); // Render the items.ejs file
-});
+app.get('/items', routes.items)
 
-app.get('/closet', (req, res) => {
-    res.render('closet'); // Ensure 'closet.ejs' exists in the views folder
-});
+// Add the closet route
+app.get('/closet', routes.closet)
 
-app.get('/mapselections', (req, res) => {
-    res.send('Map Page');
-});
+// Add the map selection
+app.get('/mapselections', routes.mapselection)
 
 // Start the server
 app.listen(PORT, () => { });

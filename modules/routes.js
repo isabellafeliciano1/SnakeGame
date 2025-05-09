@@ -166,6 +166,18 @@ function isAuthenticated(req, res, next) {
   else res.redirect('/login')
 }
 
+function items(req, res) {
+  res.render('items'); // Render the items.ejs file
+}
+
+function mapselection(req, res) {
+  res.render('mapselection');
+}
+
+function closet(req, res) {
+  res.render('closet'); // Ensure 'closet.ejs' exists in the views folder
+}
+
 // Export the route handlers
 module.exports = {
   index,
@@ -178,5 +190,8 @@ module.exports = {
   highScore,
   posthighScore,
   logout,
-  shop
+  shop,
+  items,
+  mapselection,
+  closet
 }
