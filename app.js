@@ -39,6 +39,18 @@ app.post('/highScore', routes.posthighScore)
 app.get('/logout', routes.logout)
 app.get('/shop', routes.shop)
 
+// Add the /items route
+app.get('/items', (req, res) => {
+    res.render('items'); // Render the items.ejs file
+});
+
+app.get('/closet', (req, res) => {
+    res.render('closet'); // Ensure 'closet.ejs' exists in the views folder
+});
+
+app.get('/mapselections', (req, res) => {
+    res.render('mapselection'); // Render the mapselection.ejs file
+});
 
 // Start the server
 app.listen(PORT, () => { });
