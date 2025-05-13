@@ -21,6 +21,16 @@ const db = new sqlite3.Database('./data/database.db', (err) => {
   if (err) {
     return console.error(err.message);
   }
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    uid INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    salt TEXT NOT NULL
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating table:', err.message);
+    }
+  });
   console.log('Connected to the database.');
 });
 
@@ -66,6 +76,14 @@ function login(req, res) {
     let tokenData = jwt.verify(req.query.token, PUBLIC_KEY, { algorithms: ['RS256'] })
     req.session.token = tokenData
     req.session.user = tokenData.username
+    db.run('INSERT INTO users (username) VALUES (?);', tokenData.username, (err) => {
+      if (err) {
+        console.error(err);
+        res.send("There was an error:\n" + err)
+      } else {
+        console.log("User added to database")
+      }
+    })
     res.redirect('/')
   } else {
     res.redirect(`${AUTH_URL}/oauth?redirectURL=${THIS_URL}`)
@@ -79,7 +97,6 @@ function shop(req, res) {
 function logout(req, res) {
   req.session.destroy();
   res.redirect('/')
-
 }
 
 function highScore(req, res) {
@@ -176,6 +193,20 @@ function mapselection(req, res) {
 
 function closet(req, res) {
   res.render('closet'); // Ensure 'closet.ejs' exists in the views folder
+  
+function profile(req, res) {
+  if (req.session.user) {
+    db.get('SELECT * FROM users WHERE username=?;', req.session.user, (err, row) => {
+      if (err) {
+        console.error(err);
+        res.send("There was an error:\n" + err)
+      } else {
+        res.render('profile', { user: row });
+      }
+    })
+  } else {
+    res.redirect('/login')
+  }
 }
 
 // Export the route handlers
@@ -191,7 +222,6 @@ module.exports = {
   posthighScore,
   logout,
   shop,
-  items,
-  mapselection,
-  closet
+  profile
+
 }
