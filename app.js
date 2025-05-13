@@ -38,6 +38,7 @@ app.get('/highScore', routes.highScore)
 app.post('/highScore', routes.posthighScore)
 app.get('/logout', routes.logout)
 app.get('/shop', routes.shop)
+app.get('/profile', routes.profile)
 
 // Add the /items route
 app.get('/items', (req, res) => {
