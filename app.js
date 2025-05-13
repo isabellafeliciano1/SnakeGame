@@ -53,5 +53,6 @@ app.get('/mapselections', (req, res) => {
     res.render('mapselection'); // Render the mapselection.ejs file
 });
 
+
 // Start the server
 app.listen(PORT, () => { });

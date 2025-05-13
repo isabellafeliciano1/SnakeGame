@@ -183,6 +183,17 @@ function isAuthenticated(req, res, next) {
   else res.redirect('/login')
 }
 
+function items(req, res) {
+  res.render('items'); // Render the items.ejs file
+}
+
+function mapselection(req, res) {
+  res.render('mapselection');
+}
+
+function closet(req, res) {
+  res.render('closet'); // Ensure 'closet.ejs' exists in the views folder
+  
 function profile(req, res) {
   if (req.session.user) {
     db.get('SELECT * FROM users WHERE username=?;', req.session.user, (err, row) => {
@@ -212,4 +223,5 @@ module.exports = {
   logout,
   shop,
   profile
+
 }
