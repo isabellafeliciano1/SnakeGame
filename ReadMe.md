@@ -8,3 +8,5 @@ SnakeGame is a fast-paced multiplayer snake game where players compete to grow t
 🛍️ Custom Shop: Spend coins to unlock skins, power-ups, and maps to personalize your snake.
 
 🏆 Leaderboards: Compete for the top spot with weekly and all-time rankings.
+
+Said to be discontinued by students however possible to reinstate.
